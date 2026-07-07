@@ -31,17 +31,17 @@ graph TD
     subgraph Frontend [ 🖥️ FRONTEND DASHBOARD — Docker Container / Port 3000 ]
         UI("🎨 React 19 + Framer Motion UI")
         Nginx("⚡ Nginx Web Server")
-        UI <-->|"Served by"| Nginx
+        UI -->|"Served by"| Nginx
     end
 
     subgraph Backend [ ⚙️ BACKEND ENGINE — Windows Host / Port 8888 / Admin Privileges ]
         FastAPI("🚀 FastAPI WebSocket Server")
         Router("🔀 Protocol Dispatcher")
-        FastAPI ==> Router
+        FastAPI --> Router
     end
 
-    %% Force strict vertical alignment: Frontend directly above Backend
-    UI ===|"⚡ Live WebSocket Stream (JSON Event Frames)"|==> FastAPI
+    %% Directional arrow forces Frontend directly ABOVE Backend
+    UI -->|"⚡ Live WebSocket Stream (JSON Event Frames)"| FastAPI
 
     subgraph RawSockets [ 🔌 RAW SOCKETS ENGINE — Zero Networking Libraries ]
         DNS("🌐 Recursive DNS Resolver (UDP Port 53)")
@@ -50,10 +50,11 @@ graph TD
         HTTP("📄 Raw HTTP/1.0 Client (Manual Header Parsing)")
     end
 
-    Router ==> DNS
-    Router ==> ICMP
-    Router ==> TCP
-    Router ==> HTTP
+    %% Directional arrows force Backend directly ABOVE RawSockets
+    Router --> DNS
+    Router --> ICMP
+    Router --> TCP
+    Router --> HTTP
 
     subgraph Internet [ 🌍 EXTERNAL INTERNET & TARGETS ]
         Root("🌳 Root & TLD Nameservers (.com)")
@@ -61,10 +62,11 @@ graph TD
         Targets("🎯 Target Servers (Ports 80, 443, 22)")
     end
 
-    DNS <-->|"Query / Response"| Root
-    ICMP <-->|"Echo Request / Time Exceeded"| Hops
-    TCP <-->|"SYN / SYN-ACK / ACK"| Targets
-    HTTP <-->|"Raw GET Request / Response Stream"| Targets
+    %% Directional arrows force RawSockets directly ABOVE Internet
+    DNS -->|"Query / Response"| Root
+    ICMP -->|"Echo Request / Time Exceeded"| Hops
+    TCP -->|"SYN / SYN-ACK / ACK"| Targets
+    HTTP -->|"Raw GET Request / Response Stream"| Targets
 
     %% Solid subgraph styling with curved edges (no dashed boxes)
     style Frontend fill:#0d1117,stroke:#38bdf8,stroke-width:3px,color:#38bdf8,rx:15,ry:15
