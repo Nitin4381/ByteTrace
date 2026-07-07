@@ -1,0 +1,35 @@
+:root {
+  --bg: #F7F8FA; /* very light gray */
+  --surface: #FFFFFF; /* white cards */
+  --surface-light: #FAFAFA;
+  --border: #E5E7EB;
+  --wire: #00A896; /* Teal */
+  --wire-dim: rgba(0, 168, 150, 0.2);
+  --packet: #FF6B4A;
+  --packet-dim: rgba(255, 107, 74, 0.2);
+  --text: #1A1D23; /* dark charcoal */
+  --text-dim: #6B7280;
+  --error: #FF5470;
+
+  --font-display: "JetBrains Mono", monospace;
+  --font-body: "Inter", -apple-system, sans-serif;
+  --font-data: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+code,
+.mono {
+  font-family: var(--font-data);
+}

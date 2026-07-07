@@ -1,0 +1,30 @@
+
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    ports:
+      - "9000:8000"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    networks:
+      - bytrace-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: DockerFile
+      args:
+        - REACT_APP_WS_URL=ws://localhost:8888/trace
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+
+    networks:
+      - bytrace-network
+
+networks:
+  bytrace-network:
+    driver: bridge
