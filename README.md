@@ -22,6 +22,52 @@ Most network tools show you **results**. ByteTrace shows you the **journey**.
 
 ---
 
+## Architecture & System Workflow
+
+ByteTrace uses a **Hybrid Execution Architecture** to overcome OS restrictions: the Python backend runs directly on the Windows Host (to gain Administrator privileges for raw sockets and avoid Hyper-V port conflicts), while the React frontend is served cleanly via Docker and Nginx.
+
+```mermaid
+graph TD
+    subgraph Frontend["🖥️ Frontend Dashboard (Docker Container / Port 3000)"]
+        UI["React 19 + Framer Motion UI"]
+        Nginx["Nginx Web Server"]
+        UI -->|"Served by"| Nginx
+    end
+
+    subgraph Backend["⚙️ Backend Engine (Windows Host / Port 8888 / Admin Privileges)"]
+        FastAPI["FastAPI WebSocket Server"]
+        Router["Protocol Dispatcher"]
+        FastAPI --> Router
+    end
+
+    UI <==>|"⚡ Live WebSocket Stream (JSON Packet Events)"| FastAPI
+
+    subgraph RawSockets["🔌 Raw Sockets Engine (Zero Networking Libraries)"]
+        DNS["🌐 Recursive DNS Resolver<br/>(SOCK_DGRAM / UDP 53)"]
+        ICMP["📡 ICMP Ping & Traceroute<br/>(SOCK_RAW / IP TTL Hops)"]
+        TCP["🔍 TCP Port Scanner<br/>(SOCK_STREAM / 3-Way Handshake)"]
+        HTTP["📄 Raw HTTP/1.0 Client<br/>(Manual Header Parsing)"]
+    end
+
+    Router --> DNS
+    Router --> ICMP
+    Router --> TCP
+    Router --> HTTP
+
+    subgraph Internet["🌍 External Internet & Targets"]
+        Root["Root & TLD Servers (.) (.com)"]
+        Hops["Internet Hops & GeoIP Lookup"]
+        Targets["Target Servers (Ports 80, 443, etc.)"]
+    end
+
+    DNS <-->|"Query / Response"| Root
+    ICMP <-->|"Echo Request / Time Exceeded"| Hops
+    TCP <-->|"SYN / SYN-ACK / ACK"| Targets
+    HTTP <-->|"Raw GET Request / Response Stream"| Targets
+```
+
+---
+
 ## Features
 
 - **Recursive DNS Resolver** — traces the full DNS hierarchy: Root Servers → TLD Servers → Authoritative Servers, built from raw UDP sockets
