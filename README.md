@@ -28,42 +28,59 @@ ByteTrace uses a **Hybrid Execution Architecture** to overcome OS restrictions: 
 
 ```mermaid
 graph TD
-    subgraph Frontend["🖥️ Frontend Dashboard (Docker Container / Port 3000)"]
-        UI["React 19 + Framer Motion UI"]
-        Nginx["Nginx Web Server"]
+    %% Subgraph styling
+    style Frontend fill:#0d1117,stroke:#38bdf8,stroke-width:2px,color:#38bdf8,stroke-dasharray: 5 5
+    style Backend fill:#161b22,stroke:#a855f7,stroke-width:2px,color:#d8b4fe,stroke-dasharray: 5 5
+    style RawSockets fill:#0b1914,stroke:#10b981,stroke-width:2px,color:#6ee7b7
+    style Internet fill:#1f130b,stroke:#f59e0b,stroke-width:2px,color:#fde68a
+
+    subgraph Frontend [ 🖥️ FRONTEND DASHBOARD — Docker Container / Port 3000 ]
+        UI(["🎨 **React 19 + Framer Motion UI**"])
+        Nginx(["⚡ **Nginx Web Server**"])
         UI -->|"Served by"| Nginx
     end
 
-    subgraph Backend["⚙️ Backend Engine (Windows Host / Port 8888 / Admin Privileges)"]
-        FastAPI["FastAPI WebSocket Server"]
-        Router["Protocol Dispatcher"]
+    subgraph Backend [ ⚙️ BACKEND ENGINE — Windows Host / Port 8888 / Admin Privileges ]
+        FastAPI(["🚀 **FastAPI WebSocket Server**"])
+        Router(["🔀 **Protocol Dispatcher**"])
         FastAPI --> Router
     end
 
-    UI <==>|"⚡ Live WebSocket Stream (JSON Packet Events)"| FastAPI
+    UI <==>|"⚡ **Live WebSocket Stream (JSON Event Frames)**"| FastAPI
 
-    subgraph RawSockets["🔌 Raw Sockets Engine (Zero Networking Libraries)"]
-        DNS["🌐 Recursive DNS Resolver<br/>(SOCK_DGRAM / UDP 53)"]
-        ICMP["📡 ICMP Ping & Traceroute<br/>(SOCK_RAW / IP TTL Hops)"]
-        TCP["🔍 TCP Port Scanner<br/>(SOCK_STREAM / 3-Way Handshake)"]
-        HTTP["📄 Raw HTTP/1.0 Client<br/>(Manual Header Parsing)"]
+    subgraph RawSockets [ 🔌 RAW SOCKETS ENGINE — Zero Networking Libraries ]
+        DNS(["🌐 **Recursive DNS Resolver**<br/>(SOCK_DGRAM / UDP 53)"])
+        ICMP(["📡 **ICMP Ping & Traceroute**<br/>(SOCK_RAW / IP TTL Hops)"])
+        TCP(["🔍 **TCP Connect Port Scanner**<br/>(SOCK_STREAM / 3-Way Handshake)"])
+        HTTP(["📄 **Raw HTTP/1.0 Client**<br/>(Manual Header Parsing)"])
     end
 
-    Router --> DNS
-    Router --> ICMP
-    Router --> TCP
-    Router --> HTTP
+    Router ==> DNS
+    Router ==> ICMP
+    Router ==> TCP
+    Router ==> HTTP
 
-    subgraph Internet["🌍 External Internet & Targets"]
-        Root["Root & TLD Servers (.) (.com)"]
-        Hops["Internet Hops & GeoIP Lookup"]
-        Targets["Target Servers (Ports 80, 443, etc.)"]
+    subgraph Internet [ 🌍 EXTERNAL INTERNET & TARGETS ]
+        Root(["🌳 **Root (.) & TLD (.com) Nameservers**"])
+        Hops(["🌐 **Hop-by-Hop Internet Routers & GeoIP**"])
+        Targets(["🎯 **Target Servers (Ports 80, 443, 22, etc.)**"])
     end
 
     DNS <-->|"Query / Response"| Root
     ICMP <-->|"Echo Request / Time Exceeded"| Hops
     TCP <-->|"SYN / SYN-ACK / ACK"| Targets
     HTTP <-->|"Raw GET Request / Response Stream"| Targets
+
+    %% Modern Node Class Definitions with Vibrant Colors & Curved Edges
+    classDef frontNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef backNode fill:#6b21a8,stroke:#c084fc,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef socketNode fill:#047857,stroke:#34d399,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef netNode fill:#b45309,stroke:#fbbf24,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+
+    class UI,Nginx frontNode;
+    class FastAPI,Router backNode;
+    class DNS,ICMP,TCP,HTTP socketNode;
+    class Root,Hops,Targets netNode;
 ```
 
 ---
