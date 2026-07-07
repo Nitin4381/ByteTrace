@@ -31,16 +31,17 @@ graph TD
     subgraph Frontend [ 🖥️ FRONTEND DASHBOARD — Docker Container / Port 3000 ]
         UI("🎨 React 19 + Framer Motion UI")
         Nginx("⚡ Nginx Web Server")
-        UI -->|"Served by"| Nginx
+        UI <-->|"Served by"| Nginx
     end
 
     subgraph Backend [ ⚙️ BACKEND ENGINE — Windows Host / Port 8888 / Admin Privileges ]
         FastAPI("🚀 FastAPI WebSocket Server")
         Router("🔀 Protocol Dispatcher")
-        FastAPI --> Router
+        FastAPI ==> Router
     end
 
-    UI <-->|"⚡ Live WebSocket Stream (JSON Event Frames)"| FastAPI
+    %% Force strict vertical alignment: Frontend directly above Backend
+    UI ===|"⚡ Live WebSocket Stream (JSON Event Frames)"|==> FastAPI
 
     subgraph RawSockets [ 🔌 RAW SOCKETS ENGINE — Zero Networking Libraries ]
         DNS("🌐 Recursive DNS Resolver (UDP Port 53)")
@@ -49,10 +50,10 @@ graph TD
         HTTP("📄 Raw HTTP/1.0 Client (Manual Header Parsing)")
     end
 
-    Router --> DNS
-    Router --> ICMP
-    Router --> TCP
-    Router --> HTTP
+    Router ==> DNS
+    Router ==> ICMP
+    Router ==> TCP
+    Router ==> HTTP
 
     subgraph Internet [ 🌍 EXTERNAL INTERNET & TARGETS ]
         Root("🌳 Root & TLD Nameservers (.com)")
@@ -65,17 +66,17 @@ graph TD
     TCP <-->|"SYN / SYN-ACK / ACK"| Targets
     HTTP <-->|"Raw GET Request / Response Stream"| Targets
 
-    %% Subgraph styling at the end
-    style Frontend fill:#0d1117,stroke:#38bdf8,stroke-width:2px,color:#38bdf8,stroke-dasharray: 5 5
-    style Backend fill:#161b22,stroke:#a855f7,stroke-width:2px,color:#d8b4fe,stroke-dasharray: 5 5
-    style RawSockets fill:#0b1914,stroke:#10b981,stroke-width:2px,color:#6ee7b7
-    style Internet fill:#1f130b,stroke:#f59e0b,stroke-width:2px,color:#fde68a
+    %% Solid subgraph styling with curved edges (no dashed boxes)
+    style Frontend fill:#0d1117,stroke:#38bdf8,stroke-width:3px,color:#38bdf8,rx:15,ry:15
+    style Backend fill:#161b22,stroke:#a855f7,stroke-width:3px,color:#d8b4fe,rx:15,ry:15
+    style RawSockets fill:#0b1914,stroke:#10b981,stroke-width:3px,color:#6ee7b7,rx:15,ry:15
+    style Internet fill:#1f130b,stroke:#f59e0b,stroke-width:3px,color:#fde68a,rx:15,ry:15
 
     %% Node styling with rounded edges and vibrant colors
-    classDef frontNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:15,ry:15;
-    classDef backNode fill:#6b21a8,stroke:#c084fc,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:15,ry:15;
-    classDef socketNode fill:#047857,stroke:#34d399,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:15,ry:15;
-    classDef netNode fill:#b45309,stroke:#fbbf24,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:15,ry:15;
+    classDef frontNode fill:#0369a1,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef backNode fill:#6b21a8,stroke:#c084fc,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef socketNode fill:#047857,stroke:#34d399,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
+    classDef netNode fill:#b45309,stroke:#fbbf24,stroke-width:3px,color:#ffffff,font-size:15px,font-weight:bold,rx:20,ry:20;
 
     class UI,Nginx frontNode;
     class FastAPI,Router backNode;
