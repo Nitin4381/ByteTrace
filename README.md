@@ -4,7 +4,8 @@
 
 ByteTrace is an open source network diagnostics engine that traces every protocol your computer uses — DNS, ICMP, TCP, HTTP — built entirely from raw Python sockets with zero networking libraries, and visualized live in a React dashboard via WebSockets.
 
-<video src="https://github.com/Nitin4381/ByteTrace/raw/main/demo.mp4" controls="controls" width="100%"></video>
+🎬 **[Click Here to Download & Watch the Full Demo Video (demo.mp4)](https://github.com/Nitin4381/ByteTrace/raw/main/demo.mp4)**  
+*(High-resolution 21MB walkthrough of the live protocol visualizer in action)*
 
 ---
 
@@ -37,7 +38,8 @@ Most network tools show you **results**. ByteTrace shows you the **journey**.
 
 ## Demo
 
-<video src="https://github.com/Nitin4381/ByteTrace/raw/main/demo.mp4" controls="controls" width="100%"></video>
+🎬 **[Click Here to Download & Watch the Full Demo Video (demo.mp4)](https://github.com/Nitin4381/ByteTrace/raw/main/demo.mp4)**  
+*(High-resolution 21MB walkthrough of the live protocol visualizer in action)*
 
 ---
 
